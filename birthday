@@ -1,0 +1,219 @@
+# -*- coding: utf-8 -*-
+
+from turtle import *
+import tkinter as tk
+from PIL import Image, ImageTk
+
+font=("华文行楷", 17, "normal")  # 正文格式
+title=("华文行楷", 30, "normal")  # 标题格式
+render = {}
+color = 'pink'
+
+# 载入图片
+def showImg(face, name, side=tk.TOP, rate=1.0):
+    global render
+    load = Image.open('{}.png'.format(name))
+    size = (int(load.size[0]*rate), int(load.size[1]*rate))
+    load = load.resize(size)
+    render[name] = ImageTk.PhotoImage(load)
+    img = tk.Label(face, image=render[name]).pack(side=side)
+
+# 桌面
+class basedesk():
+    def __init__(self, master):
+        self.root = master
+        self.root.config()
+        self.root.title('萌萌宝生日快乐呀')
+        self.root.geometry('600x450')
+        self.root.resizable(False, False)
+        Init(self.root)    
+
+# 开始页
+class Init():
+    def __init__(self, master):
+        self.master = master
+        self.master.config(width=600, height=400)
+        self.face = tk.Frame(self.master)
+        self.face.pack()
+
+        text = '\n\n\n萌萌宝生日快乐\n\n'
+        
+        tk.Label(self.face, text=text, font=title).pack()
+        tk.Button(self.face, text="小作文在这里呀", font=font, command=self.next, bg=color).pack()
+
+    def next(self):
+        self.face.destroy()
+        StoryBegin(self.master)   
+
+# 正文页
+class StoryBegin():
+    def __init__(self, master):
+        self.master = master
+        self.master.config(width=600, height=400)
+        self.face = tk.Frame(self.master)
+        self.face.pack()
+
+        text = '\n2018年9月10日\n我们的故事开始\n'\
+               '还记得我们发的官宣说说吗？\n'\
+               '还是一起跑完步随手拍的自拍'
+        
+        tk.Label(self.face, text=text, font=font).pack()
+        tk.Button(self.face, text="继续我们的故事", command=self.next, bg=color).pack(side=tk.BOTTOM)
+        
+        showImg(self.face, 'couple', rate=1.5)
+
+    def next(self):
+        self.face.destroy()
+        Heart(self.master)  
+
+
+# 结尾页
+class Heart():
+    def __init__(self, master):
+        self.master = master
+        self.master.config()
+
+        self.canvas = tk.Canvas(self.master, width=600, height=450)
+        self.canvas.pack()
+
+        self.tu = RawTurtle(self.canvas)
+        self.tu.hideturtle()
+
+        self.tu.home()
+        self.tu.clear()
+        self.tu.speed(0)
+        self.tu.screen.delay(0)
+
+        self.person(0, 50)
+        s = '亲爱的宝贝：\n'\
+            '  今天不是什么特别的日子，\n'\
+            '  没有什么日子需要赋予特殊意义，\n'\
+            '  因为我时时爱你，\n'\
+            '  不需要在某个节点才袒露心意。'
+        self.word(s, -100, -150)     
+        
+    def go_to(self, x, y):
+        self.tu.penup()
+        self.tu.goto(x, y)
+        self.tu.down()
+        
+    def ring(self, a,b,c,d):
+        for i in range(a):
+            self.tu.forward(b)
+            if d == 'right':
+                self.tu.right(c)
+            else:
+                self.tu.left(c)
+
+    def heart(self, x, y, size):
+        self.go_to(x, y)
+        self.tu.left(150)
+        self.tu.begin_fill()
+        self.tu.forward(51*size)
+        self.ring(150,size,0.3,'right')
+        self.ring(210,size,0.786,'right')
+        self.tu.left(120)
+        self.ring(210,size,0.786,'right')
+        self.ring(150,size,0.3,'right')
+        self.tu.forward(51*size)
+        self.tu.end_fill()
+
+    def person(self, xbias, ybias):
+        #头部
+        self.tu.color('black')
+        self.go_to(-228, 72-ybias)
+        self.tu.pensize(3)
+        self.tu.left(150)
+        self.ring(350,1,0.8,'right')
+
+        #手臂
+        self.tu.left(150)
+        self.tu.forward(70)
+        self.tu.left(90)
+        self.tu.forward(10)
+        self.ring(200,0.1,0.9,'right')
+        self.tu.forward(10)
+        self.tu.left(90)
+        self.tu.forward(20)
+        self.ring(200,0.1,0.9,'right')
+        self.tu.forward(10)
+        self.tu.left(90)
+        self.ring(200,0.2,0.9,'right')
+        self.tu.left(100)
+        self.tu.left
+        self.tu.forward(80)
+
+        #身体
+        self.go_to(-228, 72-ybias)
+        self.tu.left(40)
+        self.tu.forward(40)
+        self.ring(120,0.2,0.9,'left')
+
+        self.go_to(-219,52-ybias)
+        self.tu.right(95)
+        self.tu.forward(80)
+        self.tu.right(85)
+        self.ring(205,0.1,0.9,'left')
+        self.tu.forward(40)
+        self.tu.left(90)
+        self.tu.forward(10)
+        self.ring(200,0.1,0.9,'right')
+        self.tu.forward(10)
+        self.tu.left(90)
+        self.tu.forward(40)
+        self.ring(205,0.1,0.9,'left')
+        self.tu.right(92)
+        self.tu.forward(90)
+
+        #左眼
+        self.go_to(-217,155-ybias)
+        self.tu.fillcolor('black')
+        self.tu.begin_fill()
+        self.tu.circle(5)
+        self.tu.end_fill()
+
+        #右眼
+        self.go_to(-169,158-ybias)
+        self.tu.fillcolor('black')
+        self.tu.begin_fill()
+        self.tu.circle(5)
+        self.tu.end_fill()
+
+        #微笑
+        self.go_to(-210,132-ybias)
+        self.tu.right(180)
+        self.ring(200,0.2,0.9,'left')
+
+        #腮红
+        self.tu.color('#ffa0a0')
+        self.tu.pensize(5)
+        self.tu.left(170)
+
+        self.go_to(-235, 135-ybias)
+        self.tu.forward(11)
+        self.go_to(-225, 135-ybias)
+        self.tu.forward(11)
+        self.go_to(-155, 140-ybias)
+        self.tu.forward(11)
+        self.go_to(-165, 140-ybias)
+        self.tu.forward(11)
+
+        #比心
+        self.tu.setheading(0)
+        self.heart(-35, 135-ybias, 0.10)
+        self.tu.setheading(0)
+        self.heart(5, 150-ybias, 0.13)
+        self.tu.setheading(0)
+        self.heart(52, 165-ybias, 0.15)
+
+    def word(self, s, x, y):
+        self.go_to(x, y)
+        self.tu.write(s,  align="left", font=("华文行楷", 20, "normal"))
+
+ 
+
+if __name__ == '__main__':    
+    root = tk.Tk()
+    basedesk(root)
+    root.mainloop()
+
